@@ -1,0 +1,1097 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>__REPORT_TITLE__</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --panel-soft: #eef4f7;
+      --text: #17202a;
+      --muted: #5c6978;
+      --line: #d9e1ea;
+      --blue: #2f80ed;
+      --green: #2e9d68;
+      --coral: #d95f43;
+      --yellow: #b58b00;
+      --ink: #0f1720;
+      --shadow: 0 14px 40px rgba(30, 42, 58, 0.08);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(47, 128, 237, 0.10), rgba(46, 157, 104, 0.06) 38%, transparent 70%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1440px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.8fr);
+      gap: 28px;
+      align-items: end;
+      padding: 34px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .kicker {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      margin-top: 10px;
+      max-width: 980px;
+      font-size: clamp(34px, 5vw, 72px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      margin-top: 18px;
+      max-width: 840px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    .hero-meta {
+      display: grid;
+      gap: 10px;
+      padding: 8px 0 8px 20px;
+      border-left: 2px solid var(--line);
+    }
+
+    .meta-row {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .meta-row span:first-child {
+      color: var(--muted);
+    }
+
+    .meta-row code {
+      overflow-wrap: anywhere;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 5px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .panel,
+    .metric-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .span-12 { grid-column: span 12; }
+    .span-8 { grid-column: span 8; }
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .section-head h2 {
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .metric-card {
+      min-height: 158px;
+      padding: 18px;
+      display: grid;
+      align-content: space-between;
+      gap: 14px;
+    }
+
+    .metric-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .metric-value {
+      margin-top: 8px;
+      color: var(--ink);
+      font-size: 30px;
+      font-weight: 850;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .metric-note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .icon {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #eaf2ff;
+      color: var(--blue);
+    }
+
+    .icon.green {
+      background: #e8f6ee;
+      color: var(--green);
+    }
+
+    .icon.coral {
+      background: #fff0eb;
+      color: var(--coral);
+    }
+
+    .icon.yellow {
+      background: #fff8df;
+      color: var(--yellow);
+    }
+
+    .spark {
+      display: flex;
+      align-items: end;
+      gap: 3px;
+      height: 34px;
+    }
+
+    .spark span {
+      flex: 1;
+      min-width: 3px;
+      border-radius: 3px 3px 0 0;
+      background: linear-gradient(180deg, rgba(47, 128, 237, 0.85), rgba(46, 157, 104, 0.78));
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(90px, 150px) minmax(0, 1fr) minmax(86px, auto);
+      gap: 12px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .bar-label {
+      color: var(--text);
+      font-weight: 750;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .bar-track {
+      position: relative;
+      height: 12px;
+      overflow: hidden;
+      background: #e6edf4;
+      border-radius: 999px;
+    }
+
+    .bar-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: var(--w);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+    }
+
+    .bar-value {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .table-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .search,
+    .filter {
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text);
+      outline: none;
+    }
+
+    .search {
+      min-width: min(360px, 100%);
+      padding: 0 12px;
+    }
+
+    .filter {
+      padding: 0 10px;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow: auto;
+      border-top: 1px solid var(--line);
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: rgba(242, 246, 250, 0.92);
+      color: #364657;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    tr:nth-child(even) td {
+      background: #fbfdff;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .sort-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .sort-icon {
+      width: 14px;
+      color: #7b8794;
+      text-align: center;
+    }
+
+    .num {
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eaf2ff;
+      color: #1f5faf;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge.warn {
+      background: #fff8df;
+      color: #7b5c00;
+    }
+
+    .badge.good {
+      background: #e8f6ee;
+      color: #1f744c;
+    }
+
+    .badge.hot {
+      background: #fff0eb;
+      color: #aa3f2a;
+    }
+
+    .title-cell {
+      min-width: 320px;
+      max-width: 620px;
+      line-height: 1.45;
+    }
+
+    .sql-card {
+      overflow: hidden;
+      background: #101820;
+      color: #dce8f5;
+    }
+
+    .sql-card header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      color: #dce8f5;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .sql-card pre {
+      margin: 0;
+      padding: 12px;
+      overflow: auto;
+      color: #e5eef8;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 30px;
+      padding: 4px 9px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.10);
+      color: inherit;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .query-head {
+      grid-column: span 12;
+      margin: 8px 0 -4px;
+    }
+
+    .empty {
+      padding: 24px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 1100px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .span-8,
+      .span-6,
+      .span-4 {
+        grid-column: span 12;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .app {
+        width: min(100vw - 24px, 1440px);
+        padding-top: 14px;
+      }
+
+      .hero,
+      .panel {
+        padding: 18px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .bar-row {
+        grid-template-columns: 78px minmax(0, 1fr);
+      }
+
+      .bar-value {
+        grid-column: 2;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <script type="application/json" id="report-data">__REPORT_JSON__</script>
+  <main class="app">
+    <section class="hero">
+      <div>
+        <div class="kicker">Codex 使用报告</div>
+        <h1 id="hero-title"></h1>
+        <p id="hero-body"></p>
+        <div class="tag-row" id="hero-tags"></div>
+      </div>
+      <aside class="hero-meta" id="hero-meta"></aside>
+    </section>
+
+    <section class="metrics" id="summary-cards"></section>
+
+    <section class="grid">
+      <section class="panel span-8">
+        <div class="section-head">
+          <div>
+            <h2 id="monthly-title"></h2>
+            <p>月度统计使用会话创建时间，并按照本机时区归入月份。</p>
+          </div>
+        </div>
+        <div class="bar-list" id="monthly-chart"></div>
+      </section>
+
+      <section class="panel span-4">
+        <div class="section-head">
+          <div>
+            <h2>使用结构</h2>
+            <p>快速查看未归档、已归档、零消耗会话和子 Agent 消耗。</p>
+          </div>
+        </div>
+        <div class="bar-list" id="shape-chart"></div>
+      </section>
+
+      <section class="panel span-12">
+        <div class="section-head">
+          <div>
+            <h2>来源拆分</h2>
+            <p>JSON 形式的来源会归为子 Agent，方便识别并行探索带来的消耗。</p>
+          </div>
+        </div>
+        <div id="source-table"></div>
+      </section>
+
+      <section class="panel span-6">
+        <div class="section-head">
+          <div>
+            <h2>峰值日期</h2>
+            <p>消耗最高的十个创建日期，能帮助定位集中工作时段。</p>
+          </div>
+        </div>
+        <div class="bar-list" id="daily-chart"></div>
+      </section>
+
+      <section class="panel span-6">
+        <div class="section-head">
+          <div>
+            <h2>模型与提供方</h2>
+            <p>空模型名会保留为“未记录模型”，避免被静默合并。</p>
+          </div>
+        </div>
+        <div id="model-table"></div>
+      </section>
+
+      <section class="panel span-12">
+        <div class="section-head">
+          <div>
+            <h2>月度明细</h2>
+            <p>可以按 token 总量、占比或单会话均值排序。</p>
+          </div>
+        </div>
+        <div id="monthly-table"></div>
+      </section>
+
+      <section class="panel span-12">
+        <div class="section-head">
+          <div>
+            <h2>高消耗会话</h2>
+            <p>支持搜索标题，按来源、模型、归档状态筛选，并按数值列排序。</p>
+          </div>
+        </div>
+        <div id="session-table"></div>
+      </section>
+
+      <section class="section-head query-head">
+        <div>
+          <h2>可复用 SQLite 查询</h2>
+          <p>只需要终端快速查看时，可以直接复制这些命令。</p>
+        </div>
+      </section>
+
+      <article class="panel span-6 sql-card">
+        <header>
+          <span>累计 tokens</span>
+          <button class="copy-btn" data-copy-key="total">复制</button>
+        </header>
+        <pre id="sql-total"></pre>
+      </article>
+
+      <article class="panel span-6 sql-card">
+        <header>
+          <span>月度使用量</span>
+          <button class="copy-btn" data-copy-key="monthly">复制</button>
+        </header>
+        <pre id="sql-monthly"></pre>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const rawReportData = document.getElementById("report-data").textContent.trim();
+    const report = rawReportData === "__REPORT_JSON__" ? {
+      meta: {
+        title: "Codex Token 使用报告模板",
+        generated_at: "通过脚本生成后显示真实时间",
+        source_db_path: "通过 --db 传入 Codex SQLite 路径",
+        queried_db_path: "生成报告时自动写入",
+        snapshot_path: "默认生成稳定快照",
+        snapshot_enabled: true,
+        since: "",
+        until: "",
+        available_columns: ["created_at", "tokens_used", "model", "source", "archived"]
+      },
+      summary: {
+        threads: 944,
+        threads_display: "944",
+        total_tokens: 7323921025,
+        total_tokens_display: "7.324B",
+        total_tokens_full: "7,323,921,025",
+        avg_tokens: 7758391,
+        avg_tokens_display: "7.76M",
+        max_tokens: 418566683,
+        max_tokens_display: "418.57M",
+        zero_threads: 66,
+        active_threads: 855,
+        archived_threads: 89,
+        active_tokens: 6715827986,
+        active_tokens_display: "6.716B",
+        archived_tokens: 608093039,
+        archived_tokens_display: "608.09M",
+        active_share: 91.7,
+        archived_share: 8.3,
+        subagent_tokens: 664098429,
+        subagent_tokens_display: "664.10M",
+        subagent_share: 9.07,
+        first_thread: "2025-09-21 22:46:40",
+        last_thread: "2026-05-22 09:16:33",
+        monthly_spark: [287, 306, 0, 1455, 745, 928, 3603],
+        avg_spark: [9.91, 6.11, 0, 5.14, 4.03, 12.71, 11.15],
+        source_spark: [6380, 664, 243, 37]
+      },
+      monthly: [
+        { month: "2026-05", threads: 323, tokens: 3602907507, tokens_display: "3.603B", share_pct: 49.19, share_display: "49.19%", avg_tokens: 11154512, avg_display: "11.15M" },
+        { month: "2026-04", threads: 73, tokens: 927808421, tokens_display: "927.81M", share_pct: 12.67, share_display: "12.67%", avg_tokens: 12709704, avg_display: "12.71M" },
+        { month: "2026-03", threads: 185, tokens: 745488142, tokens_display: "745.49M", share_pct: 10.18, share_display: "10.18%", avg_tokens: 4029666, avg_display: "4.03M" }
+      ],
+      daily_top: [
+        { day: "2026-05-06", threads: 4, tokens: 443427918, tokens_display: "443.43M" },
+        { day: "2026-05-02", threads: 13, tokens: 369792151, tokens_display: "369.79M" },
+        { day: "2026-04-24", threads: 12, tokens: 326906750, tokens_display: "326.91M" }
+      ],
+      sources: [
+        { source: "vscode", threads: 374, tokens: 6379831669, tokens_display: "6.380B", share_pct: 87.11, share_display: "87.11%", avg_tokens: 17058373, avg_display: "17.06M" },
+        { source: "子 Agent", threads: 281, tokens: 664098429, tokens_display: "664.10M", share_pct: 9.07, share_display: "9.07%", avg_tokens: 2363340, avg_display: "2.36M" },
+        { source: "exec", threads: 281, tokens: 243307217, tokens_display: "243.31M", share_pct: 3.32, share_display: "3.32%", avg_tokens: 865862, avg_display: "865.9K" }
+      ],
+      models: [
+        { model: "gpt-5.5", provider: "openai", threads: 355, tokens: 4466610323, tokens_display: "4.467B", share_pct: 60.99, share_display: "60.99%" },
+        { model: "未记录模型", provider: "sub2api", threads: 297, tokens: 1471063853, tokens_display: "1.471B", share_pct: 20.09, share_display: "20.09%" },
+        { model: "gpt-5.4", provider: "openai", threads: 30, tokens: 62521833, tokens_display: "62.52M", share_pct: 0.85, share_display: "0.85%" }
+      ],
+      top_sessions: [
+        { rank: 1, tokens: 418566683, tokens_display: "418.57M", created: "2026-05-06 14:53:14", model: "gpt-5.5", provider: "openai", source: "vscode", archived: "未归档", title: "Supabase 表语义分析" },
+        { rank: 2, tokens: 312059308, tokens_display: "312.06M", created: "2026-05-02 13:56:43", model: "gpt-5.5", provider: "openai", source: "vscode", archived: "未归档", title: "实现画布工具 CLI" },
+        { rank: 3, tokens: 116018906, tokens_display: "116.02M", created: "2026-03-10 00:26:21", model: "未记录模型", provider: "codex", source: "子 Agent", archived: "未归档", title: "Vercel 500 子 Agent 调查" }
+      ],
+      queries: {
+        total: "sqlite3 -header -column ~/.codex/state_5.sqlite \"select count(*) as threads, sum(tokens_used) as total_tokens from threads;\"",
+        monthly: "sqlite3 -header -column ~/.codex/state_5.sqlite \"select strftime('%Y-%m', created_at, 'unixepoch', 'localtime') as month, count(*) as threads, sum(tokens_used) as tokens from threads group by month order by month desc;\""
+      }
+    } : JSON.parse(rawReportData);
+
+    const iconMap = {
+      database: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>',
+      thread: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8h10"/><path d="M7 12h7"/><path d="M5 20l3-3h9a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v13z"/></svg>',
+      avg: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M7 15l3-4 4 2 5-7"/></svg>',
+      max: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l3 6 6 .9-4.5 4.4 1.1 6.2L12 17.5 6.4 20.5l1.1-6.2L3 9.9 9 9z"/></svg>',
+      archive: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18"/><path d="M5 7l1 13h12l1-13"/><path d="M9 11h6"/><path d="M8 3h8l1 4H7z"/></svg>',
+      branch: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.5 7.5A8 8 0 0 1 16.5 16.5"/><path d="M6 9v6"/></svg>'
+    };
+
+    function text(id, value) {
+      document.getElementById(id).textContent = value;
+    }
+
+    function icon(name, tone = "") {
+      const span = document.createElement("span");
+      span.className = `icon ${tone}`.trim();
+      span.innerHTML = iconMap[name] || iconMap.database;
+      return span;
+    }
+
+    function spark(values) {
+      const node = document.createElement("div");
+      node.className = "spark";
+      const nums = (values || []).map(Number).filter(Number.isFinite);
+      const max = Math.max(...nums, 1);
+      nums.forEach((value) => {
+        const bar = document.createElement("span");
+        bar.style.height = `${Math.max(12, (value / max) * 34)}px`;
+        node.appendChild(bar);
+      });
+      return node;
+    }
+
+    function renderHero() {
+      const meta = report.meta;
+      const summary = report.summary;
+      text("hero-title", `${summary.total_tokens_display} tokens 分布在 ${summary.threads_display} 个 Codex 会话中`);
+      const range = summary.first_thread && summary.last_thread
+        ? `${summary.first_thread} 至 ${summary.last_thread}`
+        : "没有带时间的会话记录";
+      text("hero-body", `生成时间：${meta.generated_at}。数据范围：${range}。来源：${meta.source_db_path}。`);
+
+      const tags = [
+        meta.snapshot_enabled ? "已固定快照" : "实时查询",
+        meta.since ? `从 ${meta.since} 起` : "全部历史",
+        meta.until ? `截至 ${meta.until}` : "无结束日期",
+        `${summary.zero_threads} 个零消耗会话`
+      ];
+      const tagRoot = document.getElementById("hero-tags");
+      tags.forEach((tag) => {
+        const chip = document.createElement("span");
+        chip.className = "tag";
+        chip.textContent = tag;
+        tagRoot.appendChild(chip);
+      });
+
+      const metaRoot = document.getElementById("hero-meta");
+      [
+        ["源数据库", meta.source_db_path],
+        ["查询数据库", meta.queried_db_path],
+        ["快照文件", meta.snapshot_path || "未启用"],
+        ["可用字段", `${meta.available_columns.length} 个`]
+      ].forEach(([label, value]) => {
+        const row = document.createElement("div");
+        row.className = "meta-row";
+        const left = document.createElement("span");
+        left.textContent = label;
+        const right = document.createElement("code");
+        right.textContent = value;
+        row.append(left, right);
+        metaRoot.appendChild(row);
+      });
+    }
+
+    function renderSummaryCards() {
+      const s = report.summary;
+      const cards = [
+        ["database", "", "累计 tokens", s.total_tokens_display, s.total_tokens_full, s.monthly_spark],
+        ["thread", "green", "会话数", s.threads_display, `${s.active_threads} 未归档 / ${s.archived_threads} 已归档`, report.monthly.map((row) => row.threads)],
+        ["avg", "yellow", "单会话均值", s.avg_tokens_display, "每个会话的平均 tokens", s.avg_spark],
+        ["max", "coral", "最高会话", s.max_tokens_display, "当前记录里的最大会话", report.top_sessions.map((row) => row.tokens).slice(0, 8).reverse()],
+        ["archive", "", "未归档占比", `${s.active_share}%`, `${s.active_tokens_display} 未归档 tokens`, [s.archived_share, s.active_share]],
+        ["branch", "green", "子 Agent 占比", `${s.subagent_share}%`, `${s.subagent_tokens_display} 子 Agent tokens`, [100 - s.subagent_share, s.subagent_share]]
+      ];
+
+      const root = document.getElementById("summary-cards");
+      cards.forEach(([iconName, tone, label, value, note, series]) => {
+        const card = document.createElement("article");
+        card.className = "metric-card";
+        const top = document.createElement("div");
+        top.className = "metric-top";
+        const labelNode = document.createElement("div");
+        labelNode.className = "metric-label";
+        labelNode.textContent = label;
+        top.append(labelNode, icon(iconName, tone));
+        const body = document.createElement("div");
+        const valueNode = document.createElement("div");
+        valueNode.className = "metric-value";
+        valueNode.textContent = value;
+        const noteNode = document.createElement("div");
+        noteNode.className = "metric-note";
+        noteNode.textContent = note;
+        body.append(valueNode, noteNode);
+        card.append(top, body, spark(series));
+        root.appendChild(card);
+      });
+    }
+
+    function renderBars(rootId, rows, labelKey, valueKey, displayKey) {
+      const root = document.getElementById(rootId);
+      root.textContent = "";
+      const max = Math.max(...rows.map((row) => Number(row[valueKey]) || 0), 1);
+      rows.forEach((row) => {
+        const wrap = document.createElement("div");
+        wrap.className = "bar-row";
+        const label = document.createElement("div");
+        label.className = "bar-label";
+        label.textContent = row[labelKey];
+        const track = document.createElement("div");
+        track.className = "bar-track";
+        const fill = document.createElement("div");
+        fill.className = "bar-fill";
+        fill.style.setProperty("--w", `${Math.max(2, (Number(row[valueKey]) / max) * 100)}%`);
+        track.appendChild(fill);
+        const value = document.createElement("div");
+        value.className = "bar-value";
+        value.textContent = row[displayKey] || row[valueKey];
+        wrap.append(label, track, value);
+        root.appendChild(wrap);
+      });
+    }
+
+    function uniqueValues(rows, key) {
+      return Array.from(new Set(rows.map((row) => row[key]).filter(Boolean))).sort();
+    }
+
+    function createDataTable(rootId, rows, columns, options = {}) {
+      const root = document.getElementById(rootId);
+      const state = {
+        query: "",
+        sortKey: options.defaultSort || columns[0].sortKey || columns[0].key,
+        sortDir: options.defaultDir || "desc",
+        filters: {}
+      };
+
+      const tools = document.createElement("div");
+      tools.className = "table-tools";
+      const search = document.createElement("input");
+      search.className = "search";
+      search.type = "search";
+      search.placeholder = options.placeholder || "搜索";
+      search.addEventListener("input", () => {
+        state.query = search.value.trim().toLowerCase();
+        draw();
+      });
+      tools.appendChild(search);
+
+      (options.filters || []).forEach((filter) => {
+        const select = document.createElement("select");
+        select.className = "filter";
+        const all = document.createElement("option");
+        all.value = "";
+        all.textContent = filter.label;
+        select.appendChild(all);
+        uniqueValues(rows, filter.key).forEach((value) => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          select.appendChild(option);
+        });
+        select.addEventListener("change", () => {
+          state.filters[filter.key] = select.value;
+          draw();
+        });
+        tools.appendChild(select);
+      });
+
+      const wrap = document.createElement("div");
+      wrap.className = "table-wrap";
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      const tbody = document.createElement("tbody");
+      table.append(thead, tbody);
+      wrap.appendChild(table);
+      root.append(tools, wrap);
+
+      function valueFor(row, column) {
+        const key = column.sortKey || column.key;
+        return row[key];
+      }
+
+      function renderCell(row, column) {
+        if (column.render) {
+          return column.render(row);
+        }
+        return row[column.key] ?? "";
+      }
+
+      function compare(a, b, column) {
+        const av = valueFor(a, column);
+        const bv = valueFor(b, column);
+        if (typeof av === "number" && typeof bv === "number") {
+          return av - bv;
+        }
+        return String(av ?? "").localeCompare(String(bv ?? ""), undefined, { numeric: true, sensitivity: "base" });
+      }
+
+      function matches(row) {
+        if (state.query) {
+          const haystack = Object.values(row).join(" ").toLowerCase();
+          if (!haystack.includes(state.query)) return false;
+        }
+        for (const [key, value] of Object.entries(state.filters)) {
+          if (value && String(row[key]) !== value) return false;
+        }
+        return true;
+      }
+
+      function drawHead() {
+        thead.textContent = "";
+        const tr = document.createElement("tr");
+        columns.forEach((column) => {
+          const th = document.createElement("th");
+          const button = document.createElement("button");
+          button.className = "sort-button";
+          const label = document.createElement("span");
+          label.textContent = column.label;
+          const marker = document.createElement("span");
+          marker.className = "sort-icon";
+          const columnKey = column.sortKey || column.key;
+          marker.textContent = state.sortKey === columnKey ? (state.sortDir === "asc" ? "↑" : "↓") : "↕";
+          button.append(label, marker);
+          button.addEventListener("click", () => {
+            if (state.sortKey === columnKey) {
+              state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+            } else {
+              state.sortKey = columnKey;
+              state.sortDir = column.defaultDir || "desc";
+            }
+            draw();
+          });
+          th.appendChild(button);
+          tr.appendChild(th);
+        });
+        thead.appendChild(tr);
+      }
+
+      function draw() {
+        drawHead();
+        tbody.textContent = "";
+        const activeColumn = columns.find((column) => (column.sortKey || column.key) === state.sortKey) || columns[0];
+        const filtered = rows.filter(matches).sort((a, b) => compare(a, b, activeColumn));
+        if (state.sortDir === "desc") filtered.reverse();
+        if (!filtered.length) {
+          const tr = document.createElement("tr");
+          const td = document.createElement("td");
+          td.colSpan = columns.length;
+          td.className = "empty";
+          td.textContent = "没有匹配当前筛选条件的记录。";
+          tr.appendChild(td);
+          tbody.appendChild(tr);
+          return;
+        }
+        filtered.forEach((row) => {
+          const tr = document.createElement("tr");
+          columns.forEach((column) => {
+            const td = document.createElement("td");
+            if (column.className) td.className = column.className;
+            const value = renderCell(row, column);
+            if (value instanceof Node) {
+              td.appendChild(value);
+            } else {
+              td.textContent = value;
+            }
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+      }
+
+      draw();
+    }
+
+    function badge(text, tone = "") {
+      const node = document.createElement("span");
+      node.className = `badge ${tone}`.trim();
+      node.textContent = text;
+      return node;
+    }
+
+    function renderTables() {
+      createDataTable("source-table", report.sources, [
+        { key: "source", label: "来源", sortKey: "source", defaultDir: "asc" },
+        { key: "threads", label: "会话数", className: "num" },
+        { key: "tokens_display", label: "Tokens", sortKey: "tokens", className: "num" },
+        { key: "share_display", label: "占比", sortKey: "share_pct", className: "num", render: (row) => badge(row.share_display, row.share_pct > 50 ? "hot" : row.share_pct > 5 ? "warn" : "good") },
+        { key: "avg_display", label: "平均/会话", sortKey: "avg_tokens", className: "num" }
+      ], { defaultSort: "tokens", placeholder: "搜索来源" });
+
+      createDataTable("model-table", report.models, [
+        { key: "model", label: "模型", sortKey: "model", defaultDir: "asc" },
+        { key: "provider", label: "提供方", sortKey: "provider", defaultDir: "asc" },
+        { key: "threads", label: "会话数", className: "num" },
+        { key: "tokens_display", label: "Tokens", sortKey: "tokens", className: "num" },
+        { key: "share_display", label: "占比", sortKey: "share_pct", className: "num", render: (row) => badge(row.share_display, row.share_pct > 25 ? "hot" : row.model === "未记录模型" ? "warn" : "good") }
+      ], {
+        defaultSort: "tokens",
+        placeholder: "搜索模型或提供方",
+        filters: [{ key: "provider", label: "全部提供方" }]
+      });
+
+      createDataTable("monthly-table", report.monthly, [
+        { key: "month", label: "月份", sortKey: "month", defaultDir: "desc" },
+        { key: "threads", label: "会话数", className: "num" },
+        { key: "tokens_display", label: "Tokens", sortKey: "tokens", className: "num" },
+        { key: "share_display", label: "占比", sortKey: "share_pct", className: "num" },
+        { key: "avg_display", label: "平均/会话", sortKey: "avg_tokens", className: "num" }
+      ], { defaultSort: "month", defaultDir: "desc", placeholder: "搜索月份" });
+
+      createDataTable("session-table", report.top_sessions, [
+        { key: "rank", label: "#", sortKey: "rank", className: "num", defaultDir: "asc" },
+        { key: "tokens_display", label: "Tokens", sortKey: "tokens", className: "num", render: (row) => badge(row.tokens_display, row.rank <= 3 ? "hot" : "") },
+        { key: "created", label: "创建时间", sortKey: "created", className: "num" },
+        { key: "model", label: "模型", sortKey: "model" },
+        { key: "provider", label: "提供方", sortKey: "provider" },
+        { key: "source", label: "来源", sortKey: "source" },
+        { key: "archived", label: "状态", sortKey: "archived", render: (row) => badge(row.archived, row.archived === "未归档" ? "good" : "warn") },
+        { key: "title", label: "标题", sortKey: "title", className: "title-cell" }
+      ], {
+        defaultSort: "tokens",
+        placeholder: "搜索标题、ID、路径或模型",
+        filters: [
+          { key: "source", label: "全部来源" },
+          { key: "model", label: "全部模型" },
+          { key: "provider", label: "全部提供方" },
+          { key: "archived", label: "全部状态" }
+        ]
+      });
+    }
+
+    function renderQueries() {
+      text("sql-total", report.queries.total);
+      text("sql-monthly", report.queries.monthly);
+      document.querySelectorAll("[data-copy-key]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const key = button.getAttribute("data-copy-key");
+          const value = report.queries[key] || "";
+          await navigator.clipboard.writeText(value);
+          const old = button.textContent;
+          button.textContent = "已复制";
+          setTimeout(() => { button.textContent = old; }, 1100);
+        });
+      });
+    }
+
+    function renderCharts() {
+      text("monthly-title", `${report.summary.total_tokens_display} tokens 覆盖 ${report.monthly.length} 个月份桶`);
+      renderBars("monthly-chart", report.monthly, "month", "tokens", "tokens_display");
+      renderBars("daily-chart", report.daily_top, "day", "tokens", "tokens_display");
+      renderBars("shape-chart", [
+        { label: "未归档", value: report.summary.active_tokens, display: `${report.summary.active_share}% · ${report.summary.active_tokens_display}` },
+        { label: "已归档", value: report.summary.archived_tokens, display: `${report.summary.archived_share}% · ${report.summary.archived_tokens_display}` },
+        { label: "子 Agent", value: report.summary.subagent_tokens, display: `${report.summary.subagent_share}% · ${report.summary.subagent_tokens_display}` },
+        { label: "零消耗", value: report.summary.zero_threads, display: `${report.summary.zero_threads} 个会话` }
+      ], "label", "value", "display");
+    }
+
+    renderHero();
+    renderSummaryCards();
+    renderCharts();
+    renderTables();
+    renderQueries();
+  </script>
+</body>
+</html>

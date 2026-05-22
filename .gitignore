@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+*.snapshot.sqlite
+*.snapshot.sqlite-shm
+*.snapshot.sqlite-wal
+*.sqlite-shm
+*.sqlite-wal

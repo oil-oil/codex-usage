@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Usage"
+  short_description: "生成可筛选排序的 Codex token 使用报告"
+  default_prompt: "Use $codex-usage to generate a Chinese sortable Codex token usage report from a local state_5.sqlite database."
