@@ -1201,9 +1201,9 @@ def chart_report_html(report: dict[str, Any]) -> str:
       <div class="chart-head">
         <div>
           <div class="chart-kicker">月度趋势</div>
-          <h2 id="daily-title">每日 Token 消耗趋势</h2>
+          <h2 id="daily-title">每日 Token 趋势</h2>
         </div>
-        <p class="chart-note" id="month-note">悬停曲线上的日期，可以查看当天明细。</p>
+        <p class="chart-note" id="month-note">指向曲线上的日期点，查看当天明细。</p>
       </div>
       <div class="month-control">
         <label for="month-select">月份
@@ -1225,7 +1225,7 @@ def chart_report_html(report: dict[str, Any]) -> str:
       <div class="chart-head">
         <div>
           <div class="chart-kicker">来源占比</div>
-          <h2 id="source-title">主要入口消耗</h2>
+          <h2 id="source-title">主要入口</h2>
         </div>
         <p class="chart-note">最多展示前五项，其余合并。</p>
       </div>
@@ -1235,9 +1235,9 @@ def chart_report_html(report: dict[str, Any]) -> str:
       <div class="chart-head">
         <div>
           <div class="chart-kicker">模型占比</div>
-          <h2 id="model-title">模型消耗分布</h2>
+          <h2 id="model-title">模型分布</h2>
         </div>
-        <p class="chart-note">标签里保留模型与提供方。</p>
+        <p class="chart-note">同时显示模型和提供方。</p>
       </div>
       <div id="model-donut"></div>
     </section>
@@ -1495,11 +1495,11 @@ def chart_report_html(report: dict[str, Any]) -> str:
       const select = document.getElementById("month-select");
       if (select.value !== view.month) select.value = view.month;
       const label = formatMonthLabel(view.month);
-      document.getElementById("daily-title").textContent = `${label}每日 Token 消耗趋势`;
-      document.getElementById("month-note").textContent = `悬停曲线上的日期，可以查看当天 Token、会话数、均值和占比。`;
-      document.getElementById("source-title").textContent = `${label}主要入口`;
-      document.getElementById("model-title").textContent = `${label}模型分布`;
-      document.getElementById("bar-title").textContent = `${label}高消耗日期`;
+      document.getElementById("daily-title").textContent = `${label} · 每日 Token 趋势`;
+      document.getElementById("month-note").textContent = `指向曲线上的日期点，可以查看当天 Token、会话数、均值和占比。`;
+      document.getElementById("source-title").textContent = `${label} · 主要入口`;
+      document.getElementById("model-title").textContent = `${label} · 模型分布`;
+      document.getElementById("bar-title").textContent = `${label} · 高消耗日期`;
       document.getElementById("stat-total").textContent = view.tokens_display || formatTokens(view.tokens);
       document.getElementById("stat-threads").textContent = String(view.threads || 0);
       document.getElementById("stat-avg").textContent = view.avg_display || formatTokens(view.avg_tokens);
@@ -1553,7 +1553,7 @@ def html_doc_markdown(report: dict[str, Any]) -> str:
     blocks.append(
         "---\n"
         f"title: {frontmatter_text(meta['title'])}\n"
-        "subtitle: 本机 Codex Token 使用概览\n"
+        "subtitle: Codex Token 月度用量分析\n"
         "lang: zh-CN\n"
         "glossary:\n"
         "  Token: 模型处理文本时使用的计量单位，输入、输出、工具上下文都会影响数量\n"
@@ -1578,10 +1578,14 @@ def html_doc_markdown(report: dict[str, Any]) -> str:
             {
                 "id": "hero",
                 "span": 12,
-                "kicker": "Codex Token",
-                "title": f"{default_month_label} Token 使用概览",
-                "body": f"这里汇总 {default_month_label}的 Token 消耗、每日趋势、主要来源、模型分布和高消耗会话。生成时间 {meta['generated_at']}。",
-                "tags": ["月度概览", "每日趋势", "悬停明细", "中文单位", "筛选排序"],
+                "kicker": "Codex Usage",
+                "title": f"{default_month_label} Codex Token 消耗报告",
+                "body": (
+                    f"本月共消耗 {default_month_view['tokens_display'] if default_month_view else summary['total_tokens_display']} Token，"
+                    f"分布在 {default_month_view['threads'] if default_month_view else summary['threads']} 个会话中。"
+                    "下方整理了每日走势、主要来源、模型分布和高消耗会话。"
+                ),
+                "tags": ["本月用量", "每日走势", "来源拆分", "模型分布", "高消耗会话"],
             },
         )
     )
@@ -1592,8 +1596,8 @@ def html_doc_markdown(report: dict[str, Any]) -> str:
             {
                 "id": "usage-real-charts",
                 "span": 12,
-                "title": f"{default_month_label}每日消耗趋势",
-                "body": f"曲线展示 {default_month_label}每天的 Token 消耗，悬停可以查看当天会话数、均值和占比。",
+                "title": f"{default_month_label} · 每日 Token 趋势",
+                "body": "把每天的消耗连成曲线，指向日期点可以查看当天会话数、单会话均值和本月占比。",
                 "url": charts_url,
                 "height": "980px",
             },

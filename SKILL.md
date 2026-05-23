@@ -52,7 +52,7 @@ python3 /path/to/codex-usage/scripts/render_token_analysis.py \
 ```python
 def analyze(report):
     return {
-        "title": "2026 年 5 月 Token 使用分析",
+        "title": "2026 年 5 月 Codex Token 分析",
         "summary": "高峰日期和主要入口决定本月消耗。",
         "metrics": [{"label": "本月 Token", "value": "36.55亿", "note": "331 个会话"}],
         "findings": [
@@ -125,7 +125,7 @@ python3 /path/to/codex-usage/scripts/generate_codex_usage_report.py \
 - 明细表格：月度明细、默认月份每日明细、来源拆分、模型/提供方、高消耗会话。
 - 交互能力：搜索、筛选、排序、复制常用 SQLite 查询。
 
-报告正文要像给用户阅读的分析页面，标题和说明使用“使用概览”“每日消耗趋势”“主要来源”“高消耗会话”这类自然表达。不要把初始化月份、切换能力、主账本、快照口径、字段来源这类实现说明写进正文；只有当用户主动追问数据口径时，再在回复里解释。
+报告正文要像给用户阅读的分析页面，标题和说明使用“Codex Token 消耗报告”“每日 Token 趋势”“主要入口”“高消耗会话”这类自然表达。不要把初始化月份、切换能力、主账本、快照口径、字段来源这类实现说明写进正文；只有当用户主动追问数据口径时，再在回复里解释。
 
 ## 数据口径
 
