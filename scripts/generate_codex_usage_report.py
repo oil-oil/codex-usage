@@ -1093,6 +1093,24 @@ def chart_report_html(report: dict[str, Any]) -> str:
       pointer-events: all;
       cursor: crosshair;
     }
+    .plot-hit-area {
+      fill: transparent;
+      pointer-events: all;
+      cursor: crosshair;
+    }
+    .hover-guide {
+      stroke: var(--accent);
+      stroke-width: 1.2;
+      stroke-dasharray: 4 5;
+      opacity: .48;
+      pointer-events: none;
+    }
+    .hover-marker {
+      fill: #FFFDF8;
+      stroke: var(--accent);
+      stroke-width: 3;
+      pointer-events: none;
+    }
     .grid-line { stroke: #E6D9CA; stroke-width: 1; }
     .axis-line { stroke: #BDAF9D; stroke-width: 1.2; }
     .axis-label, .bar-label, .bar-value {
@@ -1381,30 +1399,68 @@ def chart_report_html(report: dict[str, Any]) -> str:
 
     function bindLineHover(svg, days, points) {
       const tooltip = document.getElementById("chart-tooltip");
+      const guide = svg.querySelector("[data-hover-guide]");
+      const focus = svg.querySelector("[data-hover-marker]");
       const hide = () => {
         tooltip.hidden = true;
+        if (guide) guide.hidden = true;
+        if (focus) focus.hidden = true;
+        svg.querySelectorAll(".point").forEach((pointNode) => pointNode.setAttribute("r", "4.5"));
       };
-      svg.querySelectorAll("[data-point-index]").forEach((node) => {
-        const index = Number(node.getAttribute("data-point-index"));
+      const showIndex = (index, event) => {
         const day = days[index];
         const point = points[index];
-        const show = (event) => {
-          tooltip.hidden = false;
-          tooltip.innerHTML = `<strong>${escapeHtml(day.day)}</strong><span>Token <b>${escapeHtml(day.tokens_display || formatTokens(day.tokens))}</b></span><span>会话数 <b>${day.threads || 0}</b></span><span>均值 <b>${escapeHtml(day.avg_display || formatTokens(day.avg_tokens))}</b></span><span>本月占比 <b>${escapeHtml(day.share_display || formatPct(day.share_pct))}</b></span>`;
-          const maxLeft = Math.max(12, window.innerWidth - 260);
-          tooltip.style.left = `${Math.min(maxLeft, event.clientX + 14)}px`;
-          tooltip.style.top = `${Math.max(12, event.clientY - 18)}px`;
-          svg.querySelectorAll(".point").forEach((pointNode) => pointNode.setAttribute("r", "4.5"));
-          const marker = svg.querySelector(`[data-marker-index="${index}"]`);
-          if (marker) marker.setAttribute("r", "7");
-        };
+        if (!day || !point) return;
+        tooltip.hidden = false;
+        tooltip.innerHTML = `<strong>${escapeHtml(day.day)}</strong><span>Token <b>${escapeHtml(day.tokens_display || formatTokens(day.tokens))}</b></span><span>会话数 <b>${day.threads || 0}</b></span><span>均值 <b>${escapeHtml(day.avg_display || formatTokens(day.avg_tokens))}</b></span><span>本月占比 <b>${escapeHtml(day.share_display || formatPct(day.share_pct))}</b></span>`;
+        const maxLeft = Math.max(12, window.innerWidth - 260);
+        tooltip.style.left = `${Math.min(maxLeft, event.clientX + 14)}px`;
+        tooltip.style.top = `${Math.max(12, event.clientY - 18)}px`;
+        svg.querySelectorAll(".point").forEach((pointNode) => pointNode.setAttribute("r", "4.5"));
+        const marker = svg.querySelector(`[data-marker-index="${index}"]`);
+        if (marker) marker.setAttribute("r", "7");
+        if (guide) {
+          guide.hidden = false;
+          guide.setAttribute("x1", point[0]);
+          guide.setAttribute("x2", point[0]);
+        }
+        if (focus) {
+          focus.hidden = false;
+          focus.setAttribute("cx", point[0]);
+          focus.setAttribute("cy", point[1]);
+        }
+      };
+      const eventToSvgX = (event) => {
+        const matrix = svg.getScreenCTM();
+        if (!matrix) return null;
+        const svgPoint = svg.createSVGPoint();
+        svgPoint.x = event.clientX;
+        svgPoint.y = event.clientY;
+        return svgPoint.matrixTransform(matrix.inverse()).x;
+      };
+      const nearestIndex = (x) => {
+        if (x === null || !points.length) return -1;
+        let bestIndex = 0;
+        let bestDistance = Math.abs(points[0][0] - x);
+        points.forEach((point, index) => {
+          const distance = Math.abs(point[0] - x);
+          if (distance < bestDistance) {
+            bestIndex = index;
+            bestDistance = distance;
+          }
+        });
+        return bestIndex;
+      };
+      svg.addEventListener("pointermove", (event) => {
+        const index = nearestIndex(eventToSvgX(event));
+        if (index >= 0) showIndex(index, event);
+      });
+      svg.querySelectorAll("[data-point-index]").forEach((node) => {
+        const index = Number(node.getAttribute("data-point-index"));
+        const show = (event) => showIndex(index, event);
         node.addEventListener("mouseenter", show);
         node.addEventListener("mousemove", show);
-        node.addEventListener("mouseleave", (event) => {
-          hide();
-          const marker = svg.querySelector(`[data-marker-index="${index}"]`);
-          if (marker) marker.setAttribute("r", "4.5");
-        });
+        node.addEventListener("mouseleave", hide);
       });
       svg.addEventListener("mouseleave", hide);
     }
@@ -1453,7 +1509,7 @@ def chart_report_html(report: dict[str, Any]) -> str:
       const calloutY = Math.max(top + 18, topY - 34);
       const calloutX = Math.min(Math.max(left, topX - 74), width - right - 148);
       const calloutText = Number(topDay.tokens || 0) > 0 ? `${topDay.day} · ${topDay.tokens_display}` : `${view.month} 暂无消耗`;
-      svg.innerHTML = `<defs><linearGradient id="usage-area-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C85F43" stop-opacity="0.24"/><stop offset="100%" stop-color="#C85F43" stop-opacity="0.02"/></linearGradient></defs>${grid}<line x1="${left}" y1="${baseY}" x2="${width - right}" y2="${baseY}" class="axis-line" /><path d="${areaPath}" class="area-path" /><path d="${linePath}" class="line-path" />${markers}<g class="callout"><line x1="${topX}" y1="${topY}" x2="${topX}" y2="${calloutY + 10}" /><rect x="${calloutX}" y="${calloutY - 18}" width="148" height="34" rx="8" /><text x="${calloutX + 12}" y="${calloutY + 4}">${escapeHtml(calloutText)}</text></g>${labels}${hitTargets}`;
+      svg.innerHTML = `<defs><linearGradient id="usage-area-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C85F43" stop-opacity="0.24"/><stop offset="100%" stop-color="#C85F43" stop-opacity="0.02"/></linearGradient></defs>${grid}<line x1="${left}" y1="${baseY}" x2="${width - right}" y2="${baseY}" class="axis-line" /><path d="${areaPath}" class="area-path" /><path d="${linePath}" class="line-path" />${markers}<rect x="${left}" y="${top}" width="${innerWidth}" height="${innerHeight}" class="plot-hit-area" /><line x1="${left}" y1="${top}" x2="${left}" y2="${baseY}" class="hover-guide" data-hover-guide hidden /><circle cx="${left}" cy="${baseY}" r="7" class="hover-marker" data-hover-marker hidden /><g class="callout"><line x1="${topX}" y1="${topY}" x2="${topX}" y2="${calloutY + 10}" /><rect x="${calloutX}" y="${calloutY - 18}" width="148" height="34" rx="8" /><text x="${calloutX + 12}" y="${calloutY + 4}">${escapeHtml(calloutText)}</text></g>${labels}${hitTargets}`;
       bindLineHover(svg, days, points);
     }
 
