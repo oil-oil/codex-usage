@@ -576,7 +576,7 @@
         <div class="section-head">
           <div>
             <h2>来源拆分</h2>
-            <p>JSON 形式的来源会归为子 Agent，方便识别并行探索带来的消耗。</p>
+            <p>来源名称会转换成更容易理解的入口，例如桌面端、命令行和子 Agent。</p>
           </div>
         </div>
         <div id="source-table"></div>
@@ -700,9 +700,9 @@
         { day: "2026-04-24", threads: 12, tokens: 326906750, tokens_display: "3.27亿" }
       ],
       sources: [
-        { source: "vscode", threads: 374, tokens: 6379831669, tokens_display: "63.80亿", share_pct: 87.11, share_display: "87.11%", avg_tokens: 17058373, avg_display: "1705.84万" },
+        { source: "Codex 桌面端", threads: 374, tokens: 6379831669, tokens_display: "63.80亿", share_pct: 87.11, share_display: "87.11%", avg_tokens: 17058373, avg_display: "1705.84万" },
         { source: "子 Agent", threads: 281, tokens: 664098429, tokens_display: "6.64亿", share_pct: 9.07, share_display: "9.07%", avg_tokens: 2363340, avg_display: "236.33万" },
-        { source: "exec", threads: 281, tokens: 243307217, tokens_display: "2.43亿", share_pct: 3.32, share_display: "3.32%", avg_tokens: 865862, avg_display: "86.59万" }
+        { source: "自动执行", threads: 281, tokens: 243307217, tokens_display: "2.43亿", share_pct: 3.32, share_display: "3.32%", avg_tokens: 865862, avg_display: "86.59万" }
       ],
       models: [
         { model: "gpt-5.5", provider: "openai", threads: 355, tokens: 4466610323, tokens_display: "44.67亿", share_pct: 60.99, share_display: "60.99%" },
@@ -710,8 +710,8 @@
         { model: "gpt-5.4", provider: "openai", threads: 30, tokens: 62521833, tokens_display: "6252.18万", share_pct: 0.85, share_display: "0.85%" }
       ],
       top_sessions: [
-        { rank: 1, tokens: 418566683, tokens_display: "4.19亿", created: "2026-05-06 14:53:14", model: "gpt-5.5", provider: "openai", source: "vscode", archived: "未归档", title: "Supabase 表语义分析" },
-        { rank: 2, tokens: 312059308, tokens_display: "3.12亿", created: "2026-05-02 13:56:43", model: "gpt-5.5", provider: "openai", source: "vscode", archived: "未归档", title: "实现画布工具 CLI" },
+        { rank: 1, tokens: 418566683, tokens_display: "4.19亿", created: "2026-05-06 14:53:14", model: "gpt-5.5", provider: "openai", source: "Codex 桌面端", archived: "未归档", title: "Supabase 表语义分析" },
+        { rank: 2, tokens: 312059308, tokens_display: "3.12亿", created: "2026-05-02 13:56:43", model: "gpt-5.5", provider: "openai", source: "Codex 桌面端", archived: "未归档", title: "实现画布工具 CLI" },
         { rank: 3, tokens: 116018906, tokens_display: "1.16亿", created: "2026-03-10 00:26:21", model: "未记录模型", provider: "codex", source: "子 Agent", archived: "未归档", title: "Vercel 500 子 Agent 调查" }
       ],
       queries: {

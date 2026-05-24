@@ -24,6 +24,12 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_TEMPLATE = SKILL_DIR / "assets" / "report-template.html"
 STATE_DB_FILENAME = "state_5.sqlite"
+SOURCE_LABELS = {
+    "vscode": "Codex 桌面端",
+    "exec": "自动执行",
+    "cli": "命令行",
+    "unknown": "未知来源",
+}
 
 try:
     import tomllib
@@ -301,7 +307,7 @@ def source_group(raw_source: Any) -> str:
         return "未知来源"
     if source.startswith("{"):
         return "子 Agent"
-    return source
+    return SOURCE_LABELS.get(source.lower(), source)
 
 
 def model_name(raw_model: Any) -> str:

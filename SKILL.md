@@ -134,5 +134,6 @@ python3 /path/to/codex-usage/scripts/generate_codex_usage_report.py \
 - 官方源码里 `threads.tokens_used` 来自线程级 `total_token_usage.total_tokens` 或 `token_usage.total_tokens`，脚本按会话汇总这个字段。
 - 官方源码使用的状态库文件名是 `state_5.sqlite`，SQLite 状态目录可通过 `sqlite_home` 或 `CODEX_SQLITE_HOME` 调整。
 - 如果存在 `model`、`model_provider`、`source`、`title`、`archived`、`rollout_path`、`cwd` 等字段，报告会展示更多维度。
+- 来源字段会转成用户可读名称，例如 `vscode` 显示为“Codex 桌面端”、`exec` 显示为“自动执行”、`cli` 显示为“命令行”。
 - 默认会在 HTML 输出文件旁创建 SQLite 快照，让报告数字和生成时刻保持一致。
 - `assets/report-template.html` 只是 `--renderer standalone` 的兜底模板；常规报告优先使用 `html-doc`。
