@@ -1,6 +1,6 @@
 # codex-usage
 
-从本机 Codex SQLite 数据生成中文历史 Token 报告。
+从本机任务历史生成中文 Token 用量报告，支持趋势分析、来源拆分及 JSON、HTML 导出。
 
 完整执行规则见 [SKILL.md](SKILL.md)。
 
