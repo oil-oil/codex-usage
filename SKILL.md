@@ -1,6 +1,6 @@
 ---
 name: codex-usage
-description: 生成中文 Codex Token 使用报告，数据来自本机 Codex SQLite state 数据库。适用于查看 Codex Token 消耗、state_5.sqlite、threads.tokens_used、月度趋势、来源拆分、模型统计、高消耗会话、导出 JSON 数据，以及把 Agent 自定义 Token 分析脚本渲染成 html-doc 风格 HTML 报告。
+description: "读取本机 Codex SQLite 状态数据库，生成中文历史 Token 消耗报告，支持月度趋势、来源和模型拆分、高消耗会话、JSON 及 HTML 导出。用户要求历史用量分析时使用。不用于查询账户剩余额度、订阅账单、实时速率限制或重置时间；本地累计统计不能替代账户用量接口。"
 ---
 
 # Codex Usage
@@ -8,17 +8,6 @@ description: 生成中文 Codex Token 使用报告，数据来自本机 Codex SQ
 ## 这个 Skill 做什么
 
 从 Codex `state_*.sqlite` 数据库生成中文 Token 使用报告。报告面向普通用户阅读，默认使用 `html-doc` 风格，包含月度指标卡、真实 SVG 图表、月份选择器、曲线 hover 指标、可筛选表格、可排序表格和可复制 SQLite 查询。也支持让 Agent 编写一个只包含分析逻辑的 Python 脚本，再由 Skill 自动渲染成 HTML。所有展示数字统一使用 `万`、`亿` 等中文单位。
-
-## 什么时候使用
-
-用户提到下面任意需求时使用这个 Skill：
-
-- 想查看 Codex 过去消耗了多少 Token。
-- 想按月份、来源、模型、提供方查看 Token 分布。
-- 想找出最高消耗的 Codex 会话。
-- 想把 Codex SQLite 使用数据做成中文 HTML 报告。
-- 想让 Agent 读取 Token 数据后补充分析，并自动渲染成 HTML。
-- 想给其他用户一个可复用的 Token 使用报告生成工具。
 
 ## Agent 执行流程
 
@@ -90,9 +79,9 @@ python3 /path/to/codex-usage/scripts/generate_codex_usage_report.py \
 
 ```bash
 python3 /path/to/codex-usage/scripts/generate_codex_usage_report.py \
-  --db "/Users/alex/.codex/state_5.sqlite" \
-  --out "/Users/alex/Desktop/codex-usage-report.html" \
-  --json-out "/Users/alex/Desktop/codex-usage-report.json"
+  --db "/path/to/state.sqlite" \
+  --out "/path/to/output/codex-usage-report.html" \
+  --json-out "/path/to/output/codex-usage-report.json"
 ```
 
 ## 常用参数
